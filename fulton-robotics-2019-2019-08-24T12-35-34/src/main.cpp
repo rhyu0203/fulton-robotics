@@ -7,8 +7,11 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 #include "vex.h"
-#include<iostream>  
-
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <cstring>
+ 
 using namespace vex;
 using namespace std; 
 
@@ -37,6 +40,61 @@ double gear = HIGH_GEAR;
 const int SPIN_UP = 1;
 const int SPIN_STOP = 0;
 const int SPIN_DOWN = -1;
+std::string double_to_string(double x)
+{
+ std::ostringstream ss;
+ ss << x;
+ return ss.str();
+}
+char* to_char_array(string s)
+{
+   int n = s.length();
+    // declaring character array
+   char char_array[n + 1];
+    // copying the contents of the
+   // string to char array
+   strcpy(char_array, s.c_str());
+    for (int i = 0; i < n; i++)
+       cout << char_array[i];
+    return char_array;
+}
+char* double_to_char_array(double dbl)
+{
+ string my_string = double_to_string(dbl);
+ char* output = to_char_array(my_string);
+ return output;
+}
+ 
+ 
+void print_robot_stats()
+{
+ Controller1.Screen.clearScreen();
+ Controller1.Screen.setCursor(1,1);     
+ char gear_message[] = "GearSetting = ";
+ if(gear == 5)
+ {
+   Controller1.Screen.print(strcat(gear_message,"HIGH"));
+ }
+ else if(gear == 2)
+ {
+   Controller1.Screen.print(strcat(gear_message,"LOW"));
+ }
+ else
+ {
+   Controller1.Screen.print(strcat(gear_message,"Unknown"));
+ }
+  /*
+ Controller1.Screen.newLine();
+ Controller1.Screen.print(strcat("FR: ",double_to_char_array(FR.velocity(rpm))));
+ Controller1.Screen.newLine();
+ Controller1.Screen.print(strcat("FL: ",double_to_char_array(FL.velocity(rpm))));
+ Controller1.Screen.newLine();
+ Controller1.Screen.print(strcat("BR: ",double_to_char_array(BR.velocity(rpm))));
+ Controller1.Screen.newLine();
+ Controller1.Screen.print(strcat("BL: ",double_to_char_array(BL.velocity(rpm))));
+ */
+
+}
 
 void intakeSpin(int direction){
   if(direction == SPIN_UP){
@@ -104,6 +162,7 @@ int main() {
       moveRamp(RAMP_STOP);
       //Ramp.stop(vex::brakeType::brake);
     }
+    print_robot_stats();
     leftJoystickControl();
     if(Controller1.ButtonX.pressing()) {
       gear = HIGH_GEAR;
